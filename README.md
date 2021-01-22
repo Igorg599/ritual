@@ -41,3 +41,5 @@ GET /conacts/ID
 PATCH /conacts/ID
 
 "commit-1" - реализована верстка боковой части экрана.
+
+"commit-2" - авторизация.

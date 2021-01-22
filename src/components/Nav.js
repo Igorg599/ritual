@@ -5,25 +5,25 @@ const Nav = () => {
         <div className='navigation'>
             <div className='navigation__up'>
                 <div className='navigation__item'>
-                    <a href="#" uk-icon="icon: home"></a>
+                    <div uk-icon="icon: home"></div>
                 </div>
                 <div className='navigation__item'>
-                    <a href="#" uk-icon="icon: desktop"></a>
+                    <div uk-icon="icon: desktop"></div>
                 </div>
                 <div className='navigation__item'>
-                    <a href="#" uk-icon="icon: search"></a>
+                    <div uk-icon="icon: search"></div>
                 </div>
             </div>
 
             <div className='navigation__bottom'>
                 <div className='navigation__item'>
-                    <a href="#" uk-icon="icon: cog"></a>
+                    <div uk-icon="icon: cog"></div>
                 </div>
                 <div className='navigation__item'>
-                    <a href="#" uk-icon="icon: commenting"></a>
+                    <div uk-icon="icon: commenting"></div>
                 </div>
                 <div className='navigation__item'>
-                    <a href="#" uk-icon="icon: sign-out"></a>
+                    <div uk-icon="icon: sign-out"></div>
                 </div>
             </div>
         </div>
