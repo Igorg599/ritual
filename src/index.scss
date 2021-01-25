@@ -209,6 +209,11 @@ code {
       font-size: 14px;
       line-height: 20px;
     }
+    &-inputs {
+      display: flex;
+      flex-direction: column;
+      margin-left: 20px;
+    }
   }
   &__contact {
     display: flex;

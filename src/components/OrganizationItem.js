@@ -9,10 +9,15 @@ import Footer from './Footer';
 const OrganizationItem = () => {
     const [title, setTitle] = React.useState(true);
     const [newTitle, setNewTitle] = React.useState('');
+    const [newName, setNewName] = React.useState('');
+    const [newNo, setNewNo] = React.useState('');
+    const [newBusiness, setNewBusiness] = React.useState('');
+    const [newType, setNewType] = React.useState('');
     const [descr, setDescr] = React.useState(true);
     const [contact, setContact] = React.useState(true);
     const dispatch = useDispatch();
     const organization = useSelector(({data}) => data.organization);
+    console.log(organization);
     const contacts = useSelector(({data}) => data.contacts);
     const deleteItem = () => {
         axios.delete('http://135.181.35.61:2112/companies/12', {headers: {
@@ -31,6 +36,22 @@ const OrganizationItem = () => {
     
     const onValueTitleChange = (e) => {
         setNewTitle(e.target.value);
+    }
+
+    const onValueNameChange = (e) => {
+        setNewName(e.target.value);
+    }
+
+    const onValueNoChange = (e) => {
+        setNewNo(e.target.value);
+    }
+
+    const onValueBusinessChange = (e) => {
+        setNewBusiness(e.target.value);
+    }
+
+    const onValueTypeChange = (e) => {
+        setNewType(e.target.value);
     }
 
     const onSaveTitle = (e) => {
@@ -59,7 +80,24 @@ const OrganizationItem = () => {
         setDescr(!descr);
     }
 
-    const onSaveDescr = () => {
+    const onSaveDescr = (e) => {
+        e.preventDefault();
+        axios({
+            method: 'patch',
+            url: 'http://135.181.35.61:2112/companies/12',
+            data: {
+                name: newName === '' ? organization.name : newName,
+                contract: {no: newNo === '' ? organization.contract.no : newNo},
+                businessEntity: newBusiness === '' ? organization.businessEntity : newBusiness,
+                // type : [setNewType[0]]
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVVNFUk5BTUUiLCJpYXQiOjE2MTE1NjUwNzYsImV4cCI6MTYxMjE2OTg3Nn0.z0OLptBe_eXbO39kDfo0rkcaDaAGxH1Ked9aLTddyFc'
+            }
+          }).then (response => {
+            dispatch(setOrganization(response.data));
+        })
         setDescr(!descr);
     }
 
@@ -105,29 +143,48 @@ const OrganizationItem = () => {
                             <button className='organization__button' type='submit'>Сохранить изменения</button>
                         }
                     </form>
-                    <div className='organization__info'>
-                        <h4>ОБЩАЯ ИНФОРМАЦИЯ</h4>
-                        {descr ? 
-                            <a href='/#' className='organization__descr-icon' onClick={onChangeDescr}>
-                                <div uk-icon="icon: pencil"></div>
-                            </a> :
-                            <button className='organization__button' onClick={onSaveDescr} type='submit'>Сохранить изменения</button>
-                        }
-                    </div>
-                    <div className='organization__our'>
-                        <div className='organization__our-text'>
-                            <p>Полное название:</p>
-                            <p>Договор:</p>
-                            <p>Форма:</p>
-                            <p>Тип:</p>
+                    <form onSubmit={onSaveDescr}>
+                        <div className='organization__info'>
+                            <h4>ОБЩАЯ ИНФОРМАЦИЯ</h4>
+                            {descr ? 
+                                <a href='/#' className='organization__descr-icon' onClick={onChangeDescr}>
+                                    <div uk-icon="icon: pencil"></div>
+                                </a> :
+                                <button className='organization__button' type='submit'>Сохранить изменения</button>
+                            }
                         </div>
-                        <div className='organization__our-des'>
-                            <p>{organization.name}</p>
-                            <p>{organization.contract.no} от {organization.contract.issue_date}</p>
-                            <p>{organization.businessEntity}</p>
-                            <p>{organization.type[0]}, {organization.type[1]}</p>
+                        <div className='organization__our'>
+                            <div className='organization__our-text'>
+                                <p>Полное название:</p>
+                                <p>Договор:</p>
+                                <p>Форма:</p>
+                                <p>Тип:</p>
+                            </div>
+                            {descr ? 
+                                <div className='organization__our-des'>
+                                    <p>{organization.name}</p>
+                                    <p>{organization.contract.no}</p>
+                                    <p>{organization.businessEntity}</p>
+                                    <p>{organization.type[0]}</p>
+                                </div> :
+                                <div className='organization__our-inputs'>
+                                    <div className="organization__our-input">
+                                        <input  value={newName} onChange={onValueNameChange} className="uk-input uk-form-success uk-form-width-medium uk-form-small" type="text" placeholder={organization.name}/>
+                                    </div>
+                                    <div className="organization__our-input">
+                                        <input  value={newNo} onChange={onValueNoChange} className="uk-input uk-form-success uk-form-width-medium .uk-form-small" type="text" placeholder={organization.contract.no}/>
+                                    </div>
+                                    <div className="organization__our-input">
+                                        <input  value={newBusiness} onChange={onValueBusinessChange} className="uk-input uk-form-success uk-form-width-medium .uk-form-small" type="text" placeholder={organization.businessEntity}/>
+                                    </div>
+                                    <div className="organization__our-input">
+                                        <input  value={newType} onChange={onValueTypeChange} className="uk-input uk-form-success uk-form-width-medium .uk-form-small" type="text" placeholder={organization.type[0]}/>
+                                    </div>
+                                </div>
+                                
+                            }
                         </div>
-                    </div>
+                    </form>
                     <div className='organization__border'></div>
                     <div className='organization__contact-info'>
                         <h4>КОНТАКТНЫЕ ДАННЫЕ</h4>
