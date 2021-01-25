@@ -4,6 +4,7 @@ import Nav from './components/Nav';
 import Side from './components/Side';
 import {fetchOrganization, fetchContacts} from './redux/actions/action';
 import {useDispatch} from 'react-redux';
+import OrganizationItem from './components/OrganizationItem';
 
 function App() {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ function App() {
     <>
       <Nav/>
       <Side/>
+      <OrganizationItem/>
     </>
   );
 }

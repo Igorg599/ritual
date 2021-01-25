@@ -45,3 +45,5 @@ PATCH /conacts/ID
 "commit-2" - авторизация.
 
 "commit-3" - реализованы get запросы на получение данных с API.
+
+"commit-4" - начало реализации компонента OrganizationItem.
