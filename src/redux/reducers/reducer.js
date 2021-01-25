@@ -15,7 +15,14 @@ const data = (state = initialState, action) => {
             return {
                 ...state,
                 contacts: action.payload,
-            };    
+            };
+        
+        case 'SET_DELETE':
+        return {
+            ...state,
+            contacts: null,
+            organization: null
+        };
         
         default:
             return state;

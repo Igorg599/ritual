@@ -5,7 +5,6 @@ export const fetchOrganization = () => (dispatch)  => {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVVNFUk5BTUUiLCJpYXQiOjE2MTE1NjUwNzYsImV4cCI6MTYxMjE2OTg3Nn0.z0OLptBe_eXbO39kDfo0rkcaDaAGxH1Ked9aLTddyFc'
       }}).then (response => {
-          console.log(response.data);
         dispatch(setOrganization(response.data));
         })
 };
@@ -15,7 +14,6 @@ export const fetchContacts = () => (dispatch)  => {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVVNFUk5BTUUiLCJpYXQiOjE2MTE1NjUwNzYsImV4cCI6MTYxMjE2OTg3Nn0.z0OLptBe_eXbO39kDfo0rkcaDaAGxH1Ked9aLTddyFc'
       }}).then (response => {
-          console.log(response.data);
         dispatch(setContacts(response.data));
         })
 };
@@ -28,4 +26,8 @@ export const setOrganization = (items) => ({
 export const setContacts = (items) => ({
     type: 'SET_CONTACTS',
     payload: items,
+});
+
+export const setDelete = () => ({
+  type: 'SET_DELETE'
 });

@@ -47,3 +47,5 @@ PATCH /conacts/ID
 "commit-3" - реализованы get запросы на получение данных с API.
 
 "commit-4" - начало реализации компонента OrganizationItem.
+
+"commit-5" - реализован delete запрос.
