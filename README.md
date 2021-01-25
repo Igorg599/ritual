@@ -49,3 +49,5 @@ PATCH /conacts/ID
 "commit-4" - начало реализации компонента OrganizationItem.
 
 "commit-5" - реализован delete запрос.
+
+"commit-6" - реализован patch запрос на редактирование заголовка.

@@ -1,7 +1,8 @@
 import React from 'react';
 import {useSelector,useDispatch} from 'react-redux';
-import {setDelete} from '../redux/actions/action';
+import {setDelete, setOrganization} from '../redux/actions/action';
 import axios from 'axios';
+
 
 import Footer from './Footer';
 
@@ -34,13 +35,24 @@ const OrganizationItem = () => {
 
     const onSaveTitle = (e) => {
         e.preventDefault();
-        axios.patch('http://135.181.35.61:2112/companies/12', {headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVVNFUk5BTUUiLCJpYXQiOjE2MTE1NjUwNzYsImV4cCI6MTYxMjE2OTg3Nn0.z0OLptBe_eXbO39kDfo0rkcaDaAGxH1Ked9aLTddyFc'
-        }, data: {"name": "ООО Фирма «Крайне Перспективные Захоронения»", "shortName": "КПЗ"}}).then (response => {
-            console.log(response);
+        if (newTitle === '') {
             setTitle(!title);
-        })
+        } else {
+            axios({
+                method: 'patch',
+                url: 'http://135.181.35.61:2112/companies/12',
+                data: {
+                    shortName: newTitle
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVVNFUk5BTUUiLCJpYXQiOjE2MTE1NjUwNzYsImV4cCI6MTYxMjE2OTg3Nn0.z0OLptBe_eXbO39kDfo0rkcaDaAGxH1Ked9aLTddyFc'
+                }
+              }).then (response => {
+                dispatch(setOrganization(response.data));
+                setTitle(!title);
+            })
+        }
     }
 
     const onChangeDescr = () => {
