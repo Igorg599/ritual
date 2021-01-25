@@ -1,12 +1,21 @@
-const initialState = {}
+const initialState = {
+    organization: null,
+    contacts: null
+}
 
 const data = (state = initialState, action) => {
     switch (action.type) {
-        case 'SET_PIZZAS':
+        case 'SET_ORGANIZATION':
             return {
                 ...state,
-                items: action.payload,
+                organization: action.payload,
             };
+
+        case 'SET_CONTACTS':
+            return {
+                ...state,
+                contacts: action.payload,
+            };    
         
         default:
             return state;

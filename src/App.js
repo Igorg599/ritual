@@ -2,15 +2,20 @@ import React from 'react';
 
 import Nav from './components/Nav';
 import Side from './components/Side';
-import {fetchData} from './redux/actions/action';
+import {fetchOrganization, fetchContacts} from './redux/actions/action';
 import {useDispatch} from 'react-redux';
 
 function App() {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(fetchData());
+    dispatch(fetchOrganization());
   }, [dispatch]);
+
+  React.useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
   return (
     <>
       <Nav/>
