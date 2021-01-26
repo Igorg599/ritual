@@ -1,6 +1,6 @@
 import React from 'react';
 import {useSelector,useDispatch} from 'react-redux';
-import {setDelete, setOrganization} from '../redux/actions/action';
+import {setDelete, setOrganization, setContacts} from '../redux/actions/action';
 import axios from 'axios';
 
 
@@ -13,11 +13,15 @@ const OrganizationItem = () => {
     const [newNo, setNewNo] = React.useState('');
     const [newBusiness, setNewBusiness] = React.useState('');
     const [newType, setNewType] = React.useState('');
+    const [newLastName, setNewLastName] = React.useState('');
+    const [newFirstName, setNewFirstName] = React.useState('');
+    const [newPatronymic, setNewPatronymic] = React.useState('');
+    const [newPhone, setNewPhone] = React.useState('');
+    const [newEmail, setNewEmail] = React.useState('');
     const [descr, setDescr] = React.useState(true);
     const [contact, setContact] = React.useState(true);
     const dispatch = useDispatch();
     const organization = useSelector(({data}) => data.organization);
-    console.log(organization);
     const contacts = useSelector(({data}) => data.contacts);
     const deleteItem = () => {
         axios.delete('http://135.181.35.61:2112/companies/12', {headers: {
@@ -52,6 +56,26 @@ const OrganizationItem = () => {
 
     const onValueTypeChange = (e) => {
         setNewType(e.target.value);
+    }
+
+    const onValueLastNameChange = (e) => {
+        setNewLastName(e.target.value);
+    }
+
+    const onValueFirstNameChange = (e) => {
+        setNewFirstName(e.target.value);
+    }
+
+    const onValuePatronymicChange = (e) => {
+        setNewPatronymic(e.target.value);
+    }
+
+    const onValuePhoneChange = (e) => {
+        setNewPhone(e.target.value);
+    }
+
+    const onValueEmailChange = (e) => {
+        setNewEmail(e.target.value);
     }
 
     const onSaveTitle = (e) => {
@@ -89,7 +113,7 @@ const OrganizationItem = () => {
                 name: newName === '' ? organization.name : newName,
                 contract: {no: newNo === '' ? organization.contract.no : newNo},
                 businessEntity: newBusiness === '' ? organization.businessEntity : newBusiness,
-                // type : [setNewType[0]]
+                // type : ['action', 'type']
             },
             headers: {
                 'Content-Type': 'application/json',
@@ -105,7 +129,26 @@ const OrganizationItem = () => {
         setContact(!contact);
     }
 
-    const onSaveContact = () => {
+    const onSaveContact = (e) => {
+        e.preventDefault();
+        console.log('asdads');
+        axios({
+            method: 'patch',
+            url: 'http://135.181.35.61:2112/contacts/16',
+            data: {
+                lastname: newLastName === '' ? contacts.lastname : newLastName,
+                firstname: newFirstName === '' ? contacts.firstname : newFirstName,
+                patronymic: newPatronymic === '' ? contacts.patronymic : newPatronymic,
+                phone: newPhone === '' ? contacts.phone : newPhone,
+                email: newEmail === '' ? contacts.email : newEmail
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVVNFUk5BTUUiLCJpYXQiOjE2MTE1NjUwNzYsImV4cCI6MTYxMjE2OTg3Nn0.z0OLptBe_eXbO39kDfo0rkcaDaAGxH1Ked9aLTddyFc'
+            }
+          }).then (response => {
+            dispatch(setContacts(response.data));
+        }).catch (() => alert('Ошибка! Скорее всего вы ввели невалидный номер телефона или адрес электронной почты!'))
         setContact(!contact);
     }
 
@@ -184,29 +227,46 @@ const OrganizationItem = () => {
                                 
                             }
                         </div>
-                    </form>
+                    </form >
                     <div className='organization__border'></div>
-                    <div className='organization__contact-info'>
-                        <h4>КОНТАКТНЫЕ ДАННЫЕ</h4>
-                        {contact ? 
-                            <a href='/#' className='organization__descr-icon' onClick={onChangeContact}>
-                                <div uk-icon="icon: pencil"></div>
-                            </a> :
-                            <button className='organization__button' onClick={onSaveContact} type='submit'>Сохранить изменения</button>
-                        }
-                    </div>
-                    <div className='organization__contact'>
-                        <div className='organization__contact-text'>
-                            <p>ФИО:</p>
-                            <p>Телефон:</p>
-                            <p>Эл. почта:</p>
+                    <form onSubmit={onSaveContact}>
+                        <div className='organization__contact-info'>
+                            <h4>КОНТАКТНЫЕ ДАННЫЕ</h4>
+                            {contact ? 
+                                <a href='/#' className='organization__descr-icon' onClick={onChangeContact}>
+                                    <div uk-icon="icon: pencil"></div>
+                                </a> :
+                                <button className='organization__button' type='submit'>Сохранить изменения</button>
+                            }
                         </div>
-                        <div className='organization__contact-des'>
-                            <p>{contacts.lastname} {contacts.firstname} {contacts.patronymic}</p>
-                            <p>{contacts.phone}</p>
-                            <p>{contacts.email}</p>
+                        <div className='organization__contact'>
+                            <div className='organization__contact-text'>
+                                <p>ФИО:</p>
+                                <p>Телефон:</p>
+                                <p>Эл. почта:</p>
+                            </div>
+                            {contact ? 
+                                <div className='organization__contact-des'>
+                                    <p>{contacts.lastname} {contacts.firstname} {contacts.patronymic}</p>
+                                    <p>{contacts.phone}</p>
+                                    <p>{contacts.email}</p>
+                                </div> :
+                                <div className='organization__our-inputs'>
+                                    <div className="organization__our-input">
+                                        <input  value={newLastName} onChange={onValueLastNameChange} className="uk-input uk-form-success uk-form-width-medium uk-form-small" type="text" placeholder={contacts.lastname}/>
+                                        <input  value={newFirstName} onChange={onValueFirstNameChange} className="uk-input uk-form-success uk-form-width-medium uk-form-small" type="text" placeholder={contacts.firstname}/>
+                                        <input  value={newPatronymic} onChange={onValuePatronymicChange} className="uk-input uk-form-success uk-form-width-medium uk-form-small" type="text" placeholder={contacts.patronymic}/>
+                                    </div>
+                                    <div className="organization__our-input">
+                                        <input  value={newPhone} onChange={onValuePhoneChange} className="uk-input uk-form-success uk-form-width-medium .uk-form-small" type="number" placeholder={contacts.phone}/>
+                                    </div>
+                                    <div className="organization__our-input">
+                                        <input  value={newEmail} onChange={onValueEmailChange} className="uk-input uk-form-success uk-form-width-medium .uk-form-small" type="email" placeholder={contacts.email}/>
+                                    </div>
+                                </div>
+                            }
                         </div>
-                    </div>
+                    </form>
                     <div className='organization__border'></div>
                     <h5>ПРИЛОЖЕННЫЕ ФОТО</h5>
                     <div className='organization__photos'>
