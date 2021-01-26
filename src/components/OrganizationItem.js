@@ -1,10 +1,11 @@
 import React from 'react';
 import {useSelector,useDispatch} from 'react-redux';
-import {setDelete, setOrganization, setContacts} from '../redux/actions/action';
+import {setDelete, setOrganization, setContacts, setDeleteImage} from '../redux/actions/action';
 import axios from 'axios';
 
 
 import Footer from './Footer';
+import ImageItem from './ImageItem';
 
 const OrganizationItem = () => {
     const [title, setTitle] = React.useState(true);
@@ -20,9 +21,11 @@ const OrganizationItem = () => {
     const [newEmail, setNewEmail] = React.useState('');
     const [descr, setDescr] = React.useState(true);
     const [contact, setContact] = React.useState(true);
+    const [update, setUpdate] = React.useState(false);
     const dispatch = useDispatch();
     const organization = useSelector(({data}) => data.organization);
     const contacts = useSelector(({data}) => data.contacts);
+
     const deleteItem = () => {
         axios.delete('http://135.181.35.61:2112/companies/12', {headers: {
             'Content-Type': 'application/json',
@@ -30,6 +33,21 @@ const OrganizationItem = () => {
           }}).then (response => {
             if (response.status === 200) {
                dispatch(setDelete()) 
+            }
+        })
+    }
+
+    const deleteImage = (item, index) => {
+        console.log(item);
+        const newObj = organization;
+        delete newObj.photos[index];
+        axios.delete(`http://135.181.35.61:2112/companies/12/image/${item}`, {headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVVNFUk5BTUUiLCJpYXQiOjE2MTE1NjUwNzYsImV4cCI6MTYxMjE2OTg3Nn0.z0OLptBe_eXbO39kDfo0rkcaDaAGxH1Ked9aLTddyFc'
+          }}).then (response => {
+            if (response.status === 200) {
+                dispatch(setDeleteImage(newObj)) 
+                setUpdate(!update);
             }
         })
     }
@@ -113,13 +131,14 @@ const OrganizationItem = () => {
                 name: newName === '' ? organization.name : newName,
                 contract: {no: newNo === '' ? organization.contract.no : newNo},
                 businessEntity: newBusiness === '' ? organization.businessEntity : newBusiness,
-                // type : ['action', 'type']
+                type:["agent"]
             },
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiVVNFUk5BTUUiLCJpYXQiOjE2MTE1NjUwNzYsImV4cCI6MTYxMjE2OTg3Nn0.z0OLptBe_eXbO39kDfo0rkcaDaAGxH1Ked9aLTddyFc'
             }
           }).then (response => {
+              console.log(response)
             dispatch(setOrganization(response.data));
         })
         setDescr(!descr);
@@ -270,11 +289,8 @@ const OrganizationItem = () => {
                     <div className='organization__border'></div>
                     <h5>ПРИЛОЖЕННЫЕ ФОТО</h5>
                     <div className='organization__photos'>
-                        {organization.photos.map((photo, index) => (
-                            <div className='organization__photo' key={organization.photos[index].name}>
-                                <img src={organization.photos[index].thumbpath} alt='kartinka'/>
-                                <p>{organization.photos[index].name}</p>
-                            </div>
+                        {organization.photos && organization.photos.map((_, index) => (
+                            <ImageItem organization={organization} key={organization.photos[index].name} index={index} onDeleteImage={deleteImage}/>
                         ))}
                     </div>
                     <div className='organization__button-plus'>

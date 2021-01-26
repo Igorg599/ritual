@@ -23,6 +23,13 @@ const data = (state = initialState, action) => {
             contacts: null,
             organization: null
         };
+
+        case 'SET_DELETE_IMAGE':
+            // const item = delete state.organization.photos;
+        return {
+            ...state,
+            organization: action.payload
+        };
         
         default:
             return state;

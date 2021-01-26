@@ -31,3 +31,8 @@ export const setContacts = (items) => ({
 export const setDelete = () => ({
   type: 'SET_DELETE'
 });
+
+export const setDeleteImage = (items) => ({
+  type: 'SET_DELETE_IMAGE',
+  payload: items,
+});
